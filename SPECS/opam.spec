@@ -1,11 +1,11 @@
 Name:           opam
-Version:        2.0.5
-Release:        2%{?dist}
+Version:        2.0.7
+Release:        1%{?dist}
 Summary:        Source-based OCaml package manager
 License:        LGPLv2.1
 URL:            https://github.com/ocaml/opam
 
-Source0: https://repo.citrite.net:443/ctx-local-contrib/xs-opam/opam-full-2.0.5.tar.gz
+Source0: https://github.com/ocaml/opam/releases/download/2.0.7/opam-full-2.0.7.tar.gz
 
 
 
@@ -15,6 +15,9 @@ BuildRequires:  ocaml-findlib
 BuildRequires:  gcc gcc-c++
 
 %description
+Opam is a source-based package manager for OCaml. It supports multiple
+simultaneous compiler installations, flexible package constraints, and
+a Git-friendly development workflow.
 
 %prep
 %autosetup -n %{name}-full-%{version} -p1
@@ -23,21 +26,29 @@ BuildRequires:  gcc gcc-c++
 %configure
 make lib-ext
 make
-make man
 
 %install
+# The makefile looks like it tries to invoke ocamlfind but only if DESTDIR
+# isn't set. If it is set (which it is) LIBINSTALLDIR must be set too
+# for installing opam-installer metadata.
 %make_install LIBINSTALL_DIR=%{buildroot}/%{_libdir}/ocaml
+
+# However it looks like some (extra) documentation gets
+# installed in the wrong place so... delete it.
+rm -rf %{buildroot}%{_prefix}/doc
 
 %files
 %doc README.md CHANGES AUTHORS CONTRIBUTING.md
 %{_bindir}/opam
 %{_bindir}/opam-installer
-%{_libdir}/ocaml/opam-installer
 %license LICENSE
 %{_mandir}/man1/*.1*
 %exclude /usr/doc/opam-installer/*
 
 %changelog
+* Fri Jan 08 2021 Pau Ruiz Safont <pau.safont@citrix.com> - 2.0.7-1
+- Update to 2.0.7, include some comments from the fedora package
+
 * Wed Dec 04 2019 Christian Lindig <christian.lindig@citrix.com> - 2.0.5-1
 - update for compatibility with OCaml 4.08
 

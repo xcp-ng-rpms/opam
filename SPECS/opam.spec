@@ -5,7 +5,7 @@
 
 Name:           opam
 Version:        2.4.1
-Release:        %{?xsrel}.1%{?dist}
+Release:        %{?xsrel}.1.0.neonov.1%{?dist}
 Summary:        Source-based OCaml package manager
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 URL:            https://github.com/ocaml/opam
